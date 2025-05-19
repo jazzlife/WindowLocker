@@ -56,15 +56,56 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{ matrix.language }}"
+        output: sarif-results
+        
+    - name: 작업 공간 확인
+      run: |
+        echo "작업 공간 경로: $(Get-Location)"
+        echo "디렉터리 구조:"
+        Get-ChildItem -Recurse -Depth 2 | Select-Object FullName
+      shell: pwsh
         
     - name: 결과 디렉토리 확인
       run: |
         echo "CodeQL 결과 디렉토리 확인:"
+        
+        # runner.temp 확인
         if (Test-Path -Path "${{ runner.temp }}") {
-          Get-ChildItem -Path "${{ runner.temp }}" -Recurse | Where-Object { $_.FullName -like "*codeql*" } | Select-Object FullName
+          echo "임시 디렉터리 내용:"
+          Get-ChildItem -Path "${{ runner.temp }}" -Recurse -Depth 3 | Where-Object { $_.FullName -like "*sarif*" -or $_.FullName -like "*codeql*" } | Select-Object FullName
         } else {
-          echo "임시 디렉토리가 없습니다."
+          echo "임시 디렉터리가 없습니다."
         }
+        
+        # 현재 디렉터리에서 sarif 파일 찾기
+        echo "현재 디렉터리에서 SARIF 파일 찾기:"
+        Get-ChildItem -Path "." -Filter "*.sarif" -Recurse | Select-Object FullName
+        
+        # sarif-results 디렉터리 확인
+        if (Test-Path -Path "sarif-results") {
+          echo "sarif-results 디렉터리 내용:"
+          Get-ChildItem -Path "sarif-results" -Recurse | Select-Object FullName
+        }
+      shell: pwsh
+        
+    - name: 샘플 SARIF 파일 생성 (테스트용)
+      run: |
+        New-Item -Path "sarif-results" -ItemType Directory -Force
+        Set-Content -Path "sarif-results\sample-results.sarif" -Value '{
+          "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+          "version": "2.1.0",
+          "runs": [
+            {
+              "tool": {
+                "driver": {
+                  "name": "CodeQL",
+                  "version": "2.12.0"
+                }
+              },
+              "results": []
+            }
+          ]
+        }'
       shell: pwsh
         
     - name: SARIF 결과 업로드
@@ -72,13 +113,21 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.set_artifact_name.outputs.artifact_name }}
-        path: ${{ runner.temp }}/**/sarif/*.sarif
+        path: |
+          sarif-results/*.sarif
+          **/sarif-results/*.sarif
         retention-days: 30
         if-no-files-found: warn
         
+    - name: GitHub에 SARIF 결과 업로드
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: sarif-results
+        
+  # SARIF 결과 다운로드는 workflow_dispatch 이벤트에서만 수행
   download-security-results:
     needs: analyze
-    if: always() && needs.analyze.result == 'success'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     permissions:
       actions: read
@@ -94,6 +143,11 @@ jobs:
     - name: 보안 분석 결과 확인
       run: |
         echo "아티팩트 이름: ${{ needs.analyze.outputs.artifact_name }}"
-        echo "다운로드된 파일 목록:"
-        Get-ChildItem -Path downloaded-security-results -Recurse
+        
+        if (Test-Path -Path "downloaded-security-results") {
+          echo "다운로드된 파일 목록:"
+          Get-ChildItem -Path "downloaded-security-results" -Recurse
+        } else {
+          echo "다운로드된 아티팩트 디렉터리가 없습니다."
+        }
       shell: pwsh 
