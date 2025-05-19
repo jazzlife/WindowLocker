@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -578,6 +582,16 @@ namespace WindowLocker.ViewModels
             ApplyDesktopSettings();
             ApplySystemControls();
             ApplySecuritySettings();
+            
+            // 가상 데스크톱 및 태스크 뷰 비활성화
+            try
+            {
+                SystemManager.SetVirtualDesktopAndTaskViewEnabled(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"가상 데스크톱 및 태스크 뷰 비활성화 중 오류 발생: {ex.Message}");
+            }
         }
 
         public void DisablePreventHack()
@@ -605,6 +619,16 @@ namespace WindowLocker.ViewModels
             ApplyDesktopSettings();
             ApplySystemControls();
             ApplySecuritySettings();
+            
+            // 가상 데스크톱 및 태스크 뷰 활성화
+            try
+            {
+                SystemManager.SetVirtualDesktopAndTaskViewEnabled(true);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"가상 데스크톱 및 태스크 뷰 활성화 중 오류 발생: {ex.Message}");
+            }
         }
             
         public void RestartAsAdmin()

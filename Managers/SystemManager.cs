@@ -823,5 +823,70 @@ namespace WindowLocker.Managers
                 process.WaitForExit();
             }
         }
+
+        /// <summary>
+        /// 가상 데스크톱과 태스크 뷰 기능을 활성화 또는 비활성화합니다.
+        /// </summary>
+        /// <param name="enabled">true면 활성화, false면 비활성화</param>
+        public static void SetVirtualDesktopAndTaskViewEnabled(bool enabled)
+        {
+            try
+            {
+                // 가상 데스크톱 관련 레지스트리 설정
+                using (RegistryKey explorerKey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true))
+                {
+                    if (!enabled)
+                    {
+                        // 가상 데스크톱 기능 비활성화
+                        explorerKey.SetValue("VirtualDesktopTaskViewEnabled", 0, RegistryValueKind.DWord);
+                        // 가상 데스크톱 간 애니메이션 비활성화
+                        explorerKey.SetValue("EnableSwitchVirtualDesktopAnimation", 0, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        // 기본값으로 복원 (기본적으로 활성화됨)
+                        explorerKey.DeleteValue("VirtualDesktopTaskViewEnabled", false);
+                        explorerKey.DeleteValue("EnableSwitchVirtualDesktopAnimation", false);
+                    }
+                }
+
+                // 엣지 스와이프 제스처 설정 (가상 데스크톱 관련)
+                using (RegistryKey edgeUIKey = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\EdgeUI", true))
+                {
+                    if (!enabled)
+                    {
+                        // 엣지 스와이프 제스처 비활성화
+                        edgeUIKey.SetValue("AllowEdgeSwipe", 0, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        // 엣지 스와이프 제스처 활성화 또는 기본값 복원
+                        edgeUIKey.DeleteValue("AllowEdgeSwipe", false);
+                    }
+                }
+
+                // 작업 뷰 단축키 비활성화 (Win + Tab)
+                using (RegistryKey explorerKey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true))
+                {
+                    if (!enabled)
+                    {
+                        // 작업 뷰 단축키 비활성화
+                        explorerKey.SetValue("DisableTaskViewShortcut", 1, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        // 작업 뷰 단축키 활성화
+                        explorerKey.DeleteValue("DisableTaskViewShortcut", false);
+                    }
+                }
+
+                // 익스플로러 프로세스 재시작을 통해 변경사항 적용
+                RestartExplorer();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"가상 데스크톱 및 태스크 뷰 설정 변경 실패: {ex.Message}", ex);
+            }
+        }
     }
 }
