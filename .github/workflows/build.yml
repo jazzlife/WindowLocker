@@ -1,12 +1,9 @@
-name: WindowLocker CI/CD
+name: WindowLocker Release Build
 
 on:
   push:
-    branches: [ main, master ]
     tags:
       - 'v*'
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -14,7 +11,6 @@ jobs:
     runs-on: windows-latest
     outputs:
       version: ${{ steps.set_version.outputs.version }}
-      is_release: ${{ steps.set_version.outputs.is_release }}
       artifact_name: ${{ steps.set_artifact_name.outputs.artifact_name }}
     
     steps:
@@ -36,32 +32,21 @@ jobs:
         if ("${{ github.ref_type }}" -eq "tag") {
           $VERSION = "${{ github.ref_name }}".TrimStart("v")
           echo "version=$VERSION" >> $env:GITHUB_OUTPUT
-          echo "is_release=true" >> $env:GITHUB_OUTPUT
         } else {
           $TODAY = Get-Date -Format "yyyy.MM.dd"
           $SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
           $VERSION = "$TODAY-$SHORT_SHA"
           echo "version=$VERSION" >> $env:GITHUB_OUTPUT
-          echo "is_release=false" >> $env:GITHUB_OUTPUT
         }
       shell: pwsh
       
     - name: 아티팩트 이름 설정
       id: set_artifact_name
       run: |
-        if ("${{ github.event_name }}" -eq "workflow_dispatch" -or "${{ startsWith(github.ref, 'refs/tags/') }}" -eq "True") {
-          echo "artifact_name=WindowLocker-${{ steps.set_version.outputs.version }}-Release" >> $env:GITHUB_OUTPUT
-        } else {
-          echo "artifact_name=WindowLocker-Debug-${{ github.run_number }}" >> $env:GITHUB_OUTPUT
-        }
+        echo "artifact_name=WindowLocker-${{ steps.set_version.outputs.version }}-Release" >> $env:GITHUB_OUTPUT
       shell: pwsh
       
-    - name: Debug 빌드
-      if: github.event_name == 'pull_request' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
-      run: msbuild WindowLocker.sln /p:Configuration=Debug /p:Platform="Any CPU" /p:DebugSymbols=true /p:DebugType=full
-      
     - name: Release 빌드
-      if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
       run: msbuild WindowLocker.sln /p:Configuration=Release /p:Platform="Any CPU"
       
     - name: 빌드 결과물 확인
@@ -72,11 +57,6 @@ jobs:
         if (Test-Path -Path "bin") {
           echo "bin 디렉터리 존재, 내용 출력:"
           Get-ChildItem -Path "bin" -Recurse | Select-Object FullName
-          
-          if (Test-Path -Path "bin\Debug") {
-            echo "Debug 폴더 내용:"
-            Get-ChildItem -Path "bin\Debug" -Recurse | Select-Object Name, Length, LastWriteTime
-          }
           
           if (Test-Path -Path "bin\Release") {
             echo "Release 폴더 내용:"
@@ -89,15 +69,13 @@ jobs:
         }
       shell: pwsh
       
-    # 빌드 구성에 따라 아티팩트 업로드
+    # 빌드 결과물 업로드
     - name: 빌드 결과물 업로드
       id: upload_artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.set_artifact_name.outputs.artifact_name }}
         path: |
-          **/bin/Debug/*.exe
-          **/bin/Debug/*.dll
           **/bin/Release/*.exe
           **/bin/Release/*.dll
           !**/*.pdb
@@ -106,7 +84,7 @@ jobs:
         if-no-files-found: warn
         
     - name: Release 생성
-      if: steps.set_version.outputs.is_release == 'true'
+      if: github.ref_type == 'tag'
       uses: softprops/action-gh-release@v1
       with:
         name: WindowLocker ${{ steps.set_version.outputs.version }}

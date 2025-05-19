@@ -42,11 +42,13 @@ namespace WindowLocker
                 {
                     sViewModel.AutoLoginPasswordBox = _autoLoginPasswordBox;
                     
-                    // 마지막 저장된 비밀번호 로드
-                    string savedPassword = Properties.Settings.Default.AutoLoginPassword;
-                    if (!string.IsNullOrEmpty(savedPassword))
+                    // 마지막 저장된 비밀번호 로드 (암호화된 상태)
+                    string savedEncryptedPassword = Properties.Settings.Default.AutoLoginPassword;
+                    if (!string.IsNullOrEmpty(savedEncryptedPassword))
                     {
-                        _autoLoginPasswordBox.Password = savedPassword;
+                        // 암호화된 비밀번호 복호화
+                        string decryptedPassword = CryptoHelper.Decrypt(savedEncryptedPassword);
+                        _autoLoginPasswordBox.Password = decryptedPassword;
                     }
                 }
             }
