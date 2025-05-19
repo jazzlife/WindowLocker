@@ -1,0 +1,102 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!-- Window Title -->
+    <system:String x:Key="AppTitle">Windows 설정 잠금</system:String>
+    
+    <!-- Buttons -->
+    <system:String x:Key="RestartAsAdmin">관리자 권한으로 다시 시작</system:String>
+    <system:String x:Key="LoadSettings">설정 불러오기</system:String>
+    <system:String x:Key="SaveSettings">설정 저장하기</system:String>
+    <system:String x:Key="ApplyDesktopSettings">바탕화면 설정 적용</system:String>
+    <system:String x:Key="ApplySystemControls">시스템 설정 적용</system:String>
+    
+    <!-- Tab Headers -->
+    <system:String x:Key="SystemSettings">시스템 설정</system:String>
+    
+    <!-- Group Headers -->
+    <system:String x:Key="Desktop">바탕화면</system:String>
+
+    <!-- Control Dialog -->
+    <system:String x:Key="ControlTitle">시스템 제어</system:String>
+    <system:String x:Key="ControlMessage">시스템이 제어되고 있습니다.</system:String>
+    <system:String x:Key="LockSystem">시스템 잠금</system:String>
+    <system:String x:Key="UnlockSystem">시스템 잠금 해제</system:String>
+    <system:String x:Key="SecuritySettings">보안 설정</system:String>
+    <!-- Remove ControlPanelAccess and related strings -->
+    
+    <!-- Checkboxes -->
+    <system:String x:Key="SetBlackBackground">바탕화면 배경을 검정색으로 설정</system:String>
+    <system:String x:Key="HideDesktopIcons">바탕화면 아이콘 숨기기</system:String>
+    <system:String x:Key="DisableStartMenu">시작 메뉴 사용 중지</system:String>
+    <system:String x:Key="HideTaskbar">작업표시줄 숨기기 및 윈도우 키 차단</system:String>
+    <system:String x:Key="DisableSettingsApp">설정 앱 사용 중지</system:String>
+    <system:String x:Key="DisableTaskManager">작업 관리자 사용 중지</system:String>
+    <system:String x:Key="DisableControlPanel">제어판 사용 중지</system:String>
+    <system:String x:Key="DisablePersonalization">개인 설정 사용 중지</system:String>
+    <system:String x:Key="DisableUserAccounts">사용자 계정 설정 사용 중지</system:String>
+    <system:String x:Key="DisableRegistryEditor">레지스트리 편집기 사용 중지</system:String>
+    <system:String x:Key="DisableCommandPrompt">명령 프롬프트 사용 중지</system:String>
+    <system:String x:Key="DisablePowerShell">파워셸 사용 중지</system:String>
+    <system:String x:Key="DisableAdministrator">관리자 계정 비활성화</system:String>
+    <system:String x:Key="DisableHardwareAcceleration">하드웨어 가속 사용 중지</system:String>
+    <system:String x:Key="DisableRemoteDesktop">원격 데스크톱 비활성화</system:String>
+    <system:String x:Key="DisableWindowsUpdate">Windows Update 사용 중지</system:String>
+    <system:String x:Key="DisableSmartScreen">Windows SmartScreen 사용 중지</system:String>
+    <system:String x:Key="DisableUAC">사용자 계정 컨트롤(UAC) 사용 중지</system:String>
+    <system:String x:Key="MsgSmartScreenWarning">SmartScreen을 비활성화하면 보안에 취약해질 수 있습니다.</system:String>
+    <system:String x:Key="MsgUACWarning">UAC를 비활성화하면 시스템 보안이 약화될 수 있습니다.</system:String>
+    
+    <!-- Message Box Strings -->
+    <!-- Remove MsgControlPanelSuccess and MsgControlPanelError -->
+    <system:String x:Key="MsgSuccess">완료</system:String>
+    <system:String x:Key="MsgError">오류</system:String>
+    <system:String x:Key="MsgWarning">경고</system:String>
+    <system:String x:Key="MsgInfo">알림</system:String>
+    
+    <system:String x:Key="MsgDesktopSettingsSuccess">바탕화면 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgDesktopSettingsError">바탕화면 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="MsgSystemControlsSuccess">시스템 제어 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgSystemControlsError">시스템 제어 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="MsgSecuritySuccess">보안 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgSecurityError">보안 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="MsgAdminRequired">이 설정을 적용하려면 관리자 권한이 필요합니다.</system:String>
+    <system:String x:Key="MsgSettingsSaved">설정이 저장되었습니다.</system:String>
+    <system:String x:Key="MsgSettingsLoaded">설정을 불러왔습니다.</system:String>
+    <system:String x:Key="About">정보</system:String>
+    <system:String x:Key="AboutText">Windows 설정 잠금 프로그램은 관리자가 다양한 Windows 설정에 대한 접근을 제어하고 제한할 수 있게 해줍니다.
+
+주의: 신중하게 사용하세요. 특정 시스템 기능을 비활성화하면 시스템 기능에 영향을 줄 수 있습니다. 필요한 경우 설정을 복원할 수 있는 방법을 반드시 확보하세요.</system:String>
+    <system:String x:Key="ControlPanelSettings">제어판 설정</system:String>
+    <system:String x:Key="ApplyControlPanelSettings">제어판 설정 적용</system:String>
+    <system:String x:Key="ApplySecuritySettings">보안 설정 적용</system:String>
+    <system:String x:Key="AutoLoginSettings">자동 로그인 설정</system:String>
+    <system:String x:Key="EnableAutoLogin">자동 로그인 사용</system:String>
+    <system:String x:Key="Username">사용자 이름</system:String>
+    <!-- Password Dialog -->
+    <system:String x:Key="Password">비밀번호</system:String>
+    <system:String x:Key="EnterPassword">비밀번호 입력</system:String>
+    <system:String x:Key="MsgPasswordRequired">비밀번호를 입력해주세요.</system:String>
+    <system:String x:Key="OK">확인</system:String>
+    <system:String x:Key="Cancel">취소</system:String>
+    <system:String x:Key="LoginId">로그인 아이디</system:String>
+    <system:String x:Key="LoginPassword">로그인 암호</system:String>
+    <system:String x:Key="SignageSettings">사이니지 기본 설정</system:String>
+    <system:String x:Key="ApplySignageSettings">사이니지 설정 적용</system:String>
+    <system:String x:Key="MsgSignageSettingsSuccess">사이니지 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgSignageSettingsError">사이니지 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="HackingPrevention">해킹 방지</system:String>
+    <system:String x:Key="DetailedSettings">세부 설정</system:String>
+    <system:String x:Key="MsgHackingPreventionSuccess">해킹 방지 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgHackingPreventionDisabled">해킹 방지 설정이 해제되었습니다!</system:String>
+    <system:String x:Key="MsgHackingPreventionError">해킹 방지 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="SignageEnvironmentSettings">사이니지 환경 설정</system:String>
+    <system:String x:Key="MsgSignageEnvironmentSuccess">사이니지 환경 설정이 적용되었습니다!</system:String>
+    <system:String x:Key="MsgSignageEnvironmentError">사이니지 환경 설정 적용 중 오류 발생: {0}</system:String>
+    <!-- Auto Login Messages -->
+    <system:String x:Key="ApplyAutoLoginSettings">자동 로그인 설정 적용</system:String>
+    <system:String x:Key="MsgAutoLoginSettingsSuccess">자동 로그인 설정이 성공적으로 적용되었습니다!</system:String>
+    <system:String x:Key="MsgAutoLoginSettingsError">자동 로그인 설정 적용 중 오류 발생: {0}</system:String>
+    <system:String x:Key="MsgAutoLoginPasswordRequired">자동 로그인 비밀번호를 입력해주세요.</system:String>
+    <system:String x:Key="MsgAutoLoginUsernameRequired">자동 로그인 사용자 이름을 입력해주세요.</system:String>
+</ResourceDictionary>

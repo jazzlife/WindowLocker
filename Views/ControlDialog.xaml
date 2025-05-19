@@ -1,0 +1,60 @@
+<Window x:Class="WindowLocker.Views.ControlDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource ControlTitle}"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight" IsVisibleChanged="Window_IsVisibleChanged"
+        Background="Transparent" Topmost="True"
+        AllowsTransparency="True">
+    <Border Background="White"
+            CornerRadius="8"
+            BorderBrush="#DDDDDD"
+            BorderThickness="1"
+            Effect="{StaticResource CommonShadow}">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Content -->
+            <StackPanel Grid.Row="1"
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Center">
+                <!-- Hacking Prevention Toggle -->
+                <ToggleButton x:Name="HackingPreventionToggle"
+                            Width="180" Height="36" Margin="0,0,0,7"
+                            Style="{StaticResource ToggleButtonStyle}"
+                            Content="{DynamicResource HackingPrevention}"
+                            Click="HackingPreventionToggle_Click" />
+
+            <!-- Signage Settings Button -->
+                <Button x:Name="signageSettingsButton"
+                        Content="{DynamicResource ApplySignageSettings}"
+                        Width="180" Height="36" Margin="0,0,0,7"
+                        Background="{StaticResource SignageBrush}"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        Style="{StaticResource SignageButtonStyle}"
+                        Click="ApplySignageSettings_Click"/>
+
+                <!-- Detailed Settings Button -->
+                <Button Content="{DynamicResource DetailedSettings}"
+                        Width="180" Height="36"
+                        Background="{StaticResource DetailedSettingsBrush}"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        Style="{StaticResource DetailedButtonStyle}"
+                        Click="DetailedSettings_Click"/>
+
+                <!-- Close Button -->
+                <Button Content="{DynamicResource Cancel}"
+                        Width="180" Height="36" Margin="0,7,0,0"
+                        Background="{StaticResource CloseBrush}"
+                        Foreground="{StaticResource TextPrimaryBrush}"
+                        Style="{StaticResource CloseButtonStyle}"
+                        Click="CloseButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

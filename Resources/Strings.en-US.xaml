@@ -1,0 +1,99 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!-- Window Title -->
+    <system:String x:Key="AppTitle">Windows Settings Locker</system:String>
+    
+    <!-- Buttons -->
+    <system:String x:Key="RestartAsAdmin">Restart as Admin</system:String>
+    <system:String x:Key="LoadSettings">Load Settings</system:String>
+    <system:String x:Key="SaveSettings">Save Settings</system:String>
+    <system:String x:Key="ApplyDesktopSettings">Apply Desktop Settings</system:String>
+    <system:String x:Key="ApplySystemControls">Apply System Controls</system:String>
+    
+    <!-- Tab Headers -->
+    <system:String x:Key="SystemSettings">System Settings</system:String>
+    
+    <!-- Group Headers -->
+    <system:String x:Key="Desktop">Desktop</system:String>
+    <system:String x:Key="SystemControls">System Controls</system:String>
+    <system:String x:Key="SecuritySettings">Security Settings</system:String>
+    <!-- Remove ControlPanelAccess and related strings -->
+    <!-- Checkboxes -->
+    <system:String x:Key="SetBlackBackground">Set Desktop Background to Solid Black</system:String>
+    <system:String x:Key="HideDesktopIcons">Hide Desktop Icons</system:String>
+    <system:String x:Key="DisableStartMenu">Disable Start Menu</system:String>
+    <system:String x:Key="HideTaskbar">Hide Taskbar and Block Windows Key</system:String>
+    <system:String x:Key="DisableSettingsApp">Disable Settings App</system:String>
+    <system:String x:Key="DisableTaskManager">Disable Task Manager</system:String>
+    <system:String x:Key="DisableControlPanel">Disable Control Panel</system:String>
+    <system:String x:Key="DisablePersonalization">Disable Personalization Settings</system:String>
+    <system:String x:Key="DisableUserAccounts">Disable User Accounts Settings</system:String>
+    <system:String x:Key="DisableRegistryEditor">Disable Registry Editor</system:String>
+    <system:String x:Key="DisableCommandPrompt">Disable Command Prompt</system:String>
+    <system:String x:Key="DisablePowerShell">Disable PowerShell</system:String>
+    <system:String x:Key="DisableAdministrator">Disable Administrator Account</system:String>
+    <system:String x:Key="DisableHardwareAcceleration">Disable Hardware Acceleration</system:String>
+    <system:String x:Key="DisableRemoteDesktop">Disable Remote Desktop</system:String>
+    <system:String x:Key="DisableWindowsUpdate">Disable Windows Update</system:String>
+    <system:String x:Key="DisableSmartScreen">Disable Windows SmartScreen</system:String>
+    <system:String x:Key="DisableUAC">Disable User Account Control (UAC)</system:String>
+    <system:String x:Key="MsgSmartScreenWarning">Disabling SmartScreen may make your system vulnerable.</system:String>
+    <system:String x:Key="MsgUACWarning">Disabling UAC may reduce system security.</system:String>
+    <!-- Message Box Strings -->
+    <!-- Remove MsgControlPanelSuccess and MsgControlPanelError -->
+    <system:String x:Key="MsgSuccess">Success</system:String>
+    <system:String x:Key="MsgError">Error</system:String>
+    <system:String x:Key="MsgWarning">Warning</system:String>
+    <system:String x:Key="MsgInfo">Information</system:String>
+    
+    <system:String x:Key="MsgDesktopSettingsSuccess">Desktop settings applied successfully!</system:String>
+    <system:String x:Key="MsgDesktopSettingsError">Error applying desktop settings: {0}</system:String>
+    <system:String x:Key="MsgSystemControlsSuccess">System controls applied successfully!</system:String>
+    <system:String x:Key="MsgSystemControlsError">Error applying system controls: {0}</system:String>
+    <system:String x:Key="MsgSecuritySuccess">Security settings applied successfully!</system:String>
+    <system:String x:Key="MsgSecurityError">Error applying security settings: {0}</system:String>
+    <system:String x:Key="MsgAdminRequired">Administrator privileges are required to apply these settings.</system:String>
+    <system:String x:Key="MsgSettingsSaved">Settings have been saved.</system:String>
+    <system:String x:Key="MsgSettingsLoaded">Settings have been loaded.</system:String>
+    <system:String x:Key="About">About</system:String>
+    <system:String x:Key="AboutText">Windows Settings Locker allows administrators to control and restrict access to various Windows settings.
+
+Warning: Use with caution. Disabling certain system features may affect system functionality. Always ensure you have a way to restore settings if needed.</system:String>
+    <system:String x:Key="ControlPanelSettings">Control Panel Settings</system:String>
+    <system:String x:Key="ApplyControlPanelSettings">Apply Control Panel Settings</system:String>
+    <system:String x:Key="ApplySecuritySettings">Apply Security Settings</system:String>
+    <system:String x:Key="AutoLoginSettings">Auto Login Settings</system:String>
+    <system:String x:Key="EnableAutoLogin">Enable Auto Login</system:String>
+    <system:String x:Key="Username">Username</system:String>
+    <system:String x:Key="HackingPrevention">Hacking Prevention</system:String>
+    <!-- Control Dialog -->
+    <system:String x:Key="ControlTitle">System Control</system:String>
+    <system:String x:Key="ControlMessage">The system is now being controlled.</system:String>
+    <system:String x:Key="LockSystem">Lock System</system:String>
+    <system:String x:Key="UnlockSystem">Unlock System</system:String>
+    <!-- Password Dialog -->
+    <system:String x:Key="Password">Password</system:String>
+    <system:String x:Key="EnterPassword">Enter Password</system:String>
+    <system:String x:Key="MsgPasswordRequired">Password is required.</system:String>
+    <system:String x:Key="OK">OK</system:String>
+    <system:String x:Key="Cancel">Cancel</system:String>
+    <system:String x:Key="LoginId">Login ID</system:String>
+    <system:String x:Key="LoginPassword">Login Password</system:String>
+    <system:String x:Key="SignageSettings">Signage Settings</system:String>
+    <system:String x:Key="ApplySignageSettings">Apply Signage Settings</system:String>
+    <system:String x:Key="MsgHackingPreventionSuccess">Hacking prevention settings applied successfully!</system:String>
+    <system:String x:Key="MsgHackingPreventionDisabled">Hacking prevention settings disabled successfully!</system:String>
+    <system:String x:Key="MsgHackingPreventionError">Error applying hacking prevention settings: {0}</system:String>
+    <system:String x:Key="SignageEnvironmentSettings">Signage Environment Settings</system:String>
+    <system:String x:Key="MsgSignageEnvironmentSuccess">Signage environment settings applied successfully!</system:String>
+    <system:String x:Key="MsgSignageEnvironmentError">Error applying signage environment settings: {0}</system:String>
+    <system:String x:Key="MsgSignageSettingsError">Error applying signage settings: {0}</system:String>
+    <system:String x:Key="DetailedSettings">Detailed Settings</system:String>
+    <!-- Auto Login Messages -->
+    <system:String x:Key="ApplyAutoLoginSettings">Apply Auto Login Settings</system:String>
+    <system:String x:Key="MsgAutoLoginSettingsSuccess">Auto login settings have been applied successfully!</system:String>
+    <system:String x:Key="MsgAutoLoginSettingsError">Error applying auto login settings: {0}</system:String>
+    <system:String x:Key="MsgAutoLoginPasswordRequired">Auto login password is required.</system:String>
+    <system:String x:Key="MsgAutoLoginUsernameRequired">Auto login username is required.</system:String>
+</ResourceDictionary>
