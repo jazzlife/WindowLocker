@@ -92,7 +92,7 @@ jobs:
     # 빌드 구성에 따라 아티팩트 업로드
     - name: 빌드 결과물 업로드
       id: upload_artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.set_artifact_name.outputs.artifact_name }}
         path: |
@@ -126,7 +126,7 @@ jobs:
     
     steps:
     - name: 빌드 결과물 다운로드
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ needs.build.outputs.artifact_name }}
         path: downloaded-artifact
