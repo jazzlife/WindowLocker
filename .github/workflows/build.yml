@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    # GitHub 릴리즈를 위한 권한 추가
+    permissions:
+      contents: write
     outputs:
       version: ${{ steps.set_version.outputs.version }}
       artifact_name: ${{ steps.set_artifact_name.outputs.artifact_name }}
@@ -54,6 +57,10 @@ jobs:
         echo "빌드 결과물 디렉터리 확인 중..."
         echo "작업 공간 경로: $(Get-Location)"
         
+        # 모든 *.exe 및 *.dll 파일 검색
+        echo "모든 EXE 및 DLL 파일 검색:"
+        Get-ChildItem -Path . -Include *.exe, *.dll -Recurse | Select-Object FullName
+        
         if (Test-Path -Path "bin") {
           echo "bin 디렉터리 존재, 내용 출력:"
           Get-ChildItem -Path "bin" -Recurse | Select-Object FullName
@@ -69,6 +76,41 @@ jobs:
         }
       shell: pwsh
       
+    # 빌드된 파일을 특정 폴더로 복사
+    - name: 릴리스 파일 준비
+      id: prepare_release
+      run: |
+        $RELEASE_DIR = "ReleaseFiles"
+        New-Item -Path $RELEASE_DIR -ItemType Directory -Force
+        
+        # 모든 빌드 결과물 복사
+        $exeFiles = Get-ChildItem -Path . -Include "WindowLocker.exe" -Recurse
+        $dllFiles = Get-ChildItem -Path . -Include "*.dll" -Recurse -Exclude "*Test*.dll"
+        
+        if ($exeFiles.Count -gt 0) {
+          echo "EXE 파일을 릴리스 디렉터리로 복사합니다."
+          foreach ($file in $exeFiles) {
+            Copy-Item -Path $file.FullName -Destination $RELEASE_DIR
+          }
+        } else {
+          echo "EXE 파일을 찾을 수 없습니다."
+        }
+        
+        if ($dllFiles.Count -gt 0) {
+          echo "DLL 파일을 릴리스 디렉터리로 복사합니다."
+          foreach ($file in $dllFiles) {
+            Copy-Item -Path $file.FullName -Destination $RELEASE_DIR
+          }
+        } else {
+          echo "DLL 파일을 찾을 수 없습니다."
+        }
+        
+        echo "릴리스 디렉터리 내용:"
+        Get-ChildItem -Path $RELEASE_DIR | Select-Object Name, Length
+        
+        echo "release_dir=$RELEASE_DIR" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+      
     # 빌드 결과물 업로드
     - name: 빌드 결과물 업로드
       id: upload_artifact
@@ -76,10 +118,7 @@ jobs:
       with:
         name: ${{ steps.set_artifact_name.outputs.artifact_name }}
         path: |
-          **/bin/Release/*.exe
-          **/bin/Release/*.dll
-          !**/*.pdb
-          !**/*.tmp
+          ${{ steps.prepare_release.outputs.release_dir }}/*
         retention-days: 30
         if-no-files-found: warn
         
@@ -90,11 +129,8 @@ jobs:
         name: WindowLocker ${{ steps.set_version.outputs.version }}
         draft: false
         prerelease: false
-        files: |
-          **/bin/Release/WindowLocker.exe
-          **/bin/Release/*.dll
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        files: ${{ steps.prepare_release.outputs.release_dir }}/*
+        token: ${{ github.token }}
 
   # 아티팩트 다운로드 작업은 별도 실행하지 않고 필요한 경우에만 활성화
   download-artifacts:
