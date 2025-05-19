@@ -471,15 +471,15 @@ namespace WindowLocker.Managers
                     // 네 손가락 제스처 비활성화
                     key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
                     
-                    // 모든 제스처 기능 끄기
-                    key.SetValue("EnableMultiTap", 0, RegistryValueKind.DWord);
+                    // 제스처 기능 끄기, 멀티탭은 켜기
+                    key.SetValue("EnableMultiTap", 1, RegistryValueKind.DWord);
                     key.SetValue("EnableSwipeGestures", 0, RegistryValueKind.DWord);
                 }
 
-                // 2. 타블렛 PC 설정의 터치 제스처 비활성화
+                // 2. 터치 활성화
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Wisp\Touch", true))
                 {
-                    key.SetValue("TouchGate", 0, RegistryValueKind.DWord);
+                    key.SetValue("TouchGate", 1, RegistryValueKind.DWord);
                 }
 
                 // 3. 엣지 제스처 및 윈도우 제스처 비활성화
