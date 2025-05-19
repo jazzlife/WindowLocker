@@ -10,6 +10,8 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+    outputs:
+      tests_found: ${{ steps.run_tests.outputs.tests_found }}
     
     steps:
     - name: 코드 체크아웃
@@ -49,11 +51,31 @@ jobs:
       if: steps.run_tests.outputs.tests_found == 'true'
       uses: actions/upload-artifact@v3
       with:
-        name: test-results
+        name: test-results-${{ github.run_number }}
         path: TestResults/*.trx
+        retention-days: 7
+        if-no-files-found: warn
         
     - name: 코드 분석
       run: |
         dotnet tool install -g dotnet-format
         dotnet-format --verify-no-changes --verbosity diagnostic 
-      continue-on-error: true 
+      continue-on-error: true
+
+  download-test-results:
+    needs: test
+    if: needs.test.outputs.tests_found == 'true' && (github.event_name == 'workflow_dispatch' || contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/heads/master'))
+    runs-on: windows-latest
+    
+    steps:
+    - name: 테스트 결과 다운로드
+      uses: actions/download-artifact@v3
+      with:
+        name: test-results-${{ github.run_number }}
+        path: downloaded-test-results
+        
+    - name: 테스트 결과 확인
+      run: |
+        Get-ChildItem -Path downloaded-test-results -Recurse
+        echo "다운로드된 테스트 결과 확인 완료"
+      shell: pwsh 

@@ -12,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      is_release: ${{ steps.set_version.outputs.is_release }}
     
     steps:
     - name: 코드 체크아웃
@@ -56,6 +59,8 @@ jobs:
       with:
         name: WindowLocker-Debug-${{ github.run_number }}
         path: bin/Debug/
+        retention-days: 14
+        if-no-files-found: error
         
     - name: 빌드 결과물 업로드 - Release
       if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
@@ -63,6 +68,8 @@ jobs:
       with:
         name: WindowLocker-${{ steps.set_version.outputs.version }}
         path: bin/Release/
+        retention-days: 30
+        if-no-files-found: error
         
     - name: Release 생성
       if: steps.set_version.outputs.is_release == 'true'
@@ -75,4 +82,22 @@ jobs:
           bin/Release/WindowLocker.exe
           bin/Release/*.dll
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  download-example:
+    needs: build
+    runs-on: windows-latest
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: 빌드 결과물 다운로드
+      uses: actions/download-artifact@v3
+      with:
+        name: WindowLocker-${{ needs.build.outputs.version }}
+        path: downloaded-artifact
+        
+    - name: 다운로드 확인
+      run: |
+        Get-ChildItem -Path downloaded-artifact -Recurse
+        echo "다운로드된 아티팩트 버전: ${{ needs.build.outputs.version }}"
+      shell: pwsh 
