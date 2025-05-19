@@ -41,15 +41,10 @@ namespace WindowLocker
                 if (sViewModel != null)
                 {
                     sViewModel.AutoLoginPasswordBox = _autoLoginPasswordBox;
-                    
-                    // 마지막 저장된 비밀번호 로드 (암호화된 상태)
-                    string savedEncryptedPassword = Properties.Settings.Default.AutoLoginPassword;
-                    if (!string.IsNullOrEmpty(savedEncryptedPassword))
-                    {
-                        // 암호화된 비밀번호 복호화
-                        string decryptedPassword = CryptoHelper.Decrypt(savedEncryptedPassword);
-                        _autoLoginPasswordBox.Password = decryptedPassword;
-                    }
+					// 마지막 저장된 비밀번호 로드
+					string savedPassword = Properties.Settings.Default.AutoLoginPassword;
+					if (!string.IsNullOrEmpty(savedPassword))
+						_autoLoginPasswordBox.Password = savedPassword;
                 }
             }
 

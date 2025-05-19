@@ -10,10 +10,8 @@ namespace WindowLocker.Views
 {
     public partial class PasswordDialog : Window
     {
-        // 하드코딩된 비밀번호 제거
-        // 대신 암호화된 해시값 저장 (SHA256 해시)
-        private static readonly string PASSWORD_HASH = "f5c2df0af8ca8869a93fef597b5d809fc245df2d5977df81efada4f024e56e4e"; // turtle04!9 의 SHA256 해시
-        private static readonly string PASSWORD2_HASH = "e8adb5e774e26005f31fc9d96bd1eb00b1bf4b0ffc1d969ba4e8fa426c037e7c"; // 098765 의 SHA256 해시
+        private static readonly string PASSWORD_HASH = "112ca3421e26622302e7a52a6c17e0388f1f7fa465c297fcfd114c287c0fb089";
+        private static readonly string PASSWORD2_HASH = "4a9ca4596692e94f9d2912b06a0d007564a22ee750339a6021c2392149b25d6d";
 
         public string Password { get; private set; }
 
@@ -41,8 +39,9 @@ namespace WindowLocker.Views
 
             Hide();
 
-            // 입력된 비밀번호의 해시와 저장된 해시 비교
-            string inputPasswordHash = ComputeSha256Hash(PasswordBox.Password);
+            // 표준화된 해시 생성 메서드 사용
+            string inputPasswordHash = HashGenerator.ComputePasswordHash(PasswordBox.Password);
+                        
             if (inputPasswordHash == PASSWORD_HASH || inputPasswordHash == PASSWORD2_HASH)
             {
                 ((App)Application.Current).ShowControlDialog();
@@ -64,23 +63,6 @@ namespace WindowLocker.Views
                 e.Handled = true;
             }
             base.OnKeyDown(e);
-        }
-
-        /// <summary>
-        /// 문자열의 SHA256 해시를 계산합니다.
-        /// </summary>
-        private string ComputeSha256Hash(string rawData)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
         }
     }
 }

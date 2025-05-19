@@ -73,7 +73,7 @@
     <Compile Include="Managers\LanguageManager.cs" />
     <Compile Include="Managers\SingleInstanceManager.cs" />
     <Compile Include="Managers\SystemManager.cs" />
-    <Compile Include="Utilities\CryptoHelper.cs" />
+    <Compile Include="Utilities\HashGenerator.cs" />
     <Compile Include="Utilities\SystemUtilities.cs" />
     <Compile Include="Utilities\Taskbar.cs" />
     <Compile Include="Utilities\Win32Api.cs" />

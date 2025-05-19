@@ -363,14 +363,8 @@ namespace WindowLocker.ViewModels
                 Properties.Settings.Default.EnableAutoLogin = EnableAutoLogin;
                 Properties.Settings.Default.Save();
 
-                // 자동 로그인 설정 적용 시 암호 복호화하여 사용
-                string decryptedPassword = string.Empty;
-                if (!string.IsNullOrEmpty(AutoLoginPassword))
-                {
-                    decryptedPassword = CryptoHelper.Decrypt(AutoLoginPassword);
-                }
+				SecurityManager.SetAutoLogin(EnableAutoLogin, AutoLoginUsername, AutoLoginPassword);
 
-                SecurityManager.SetAutoLogin(EnableAutoLogin, AutoLoginUsername, decryptedPassword);
                 Debug.WriteLine($"Auto login settings applied: Enabled={EnableAutoLogin}, Username={AutoLoginUsername}");
 
                 if (MainWindow.Instance.IsVisible)
@@ -485,15 +479,8 @@ namespace WindowLocker.ViewModels
         public void UpdateAutoLoginPassword()
         {
             if (AutoLoginPasswordBox != null)
-            {
-                // 비밀번호를 암호화하여 저장
-                string plainPassword = AutoLoginPasswordBox.Password;
-                if (!string.IsNullOrEmpty(plainPassword))
-                {
-                    AutoLoginPassword = CryptoHelper.Encrypt(plainPassword);
-                }
-            }
-        }
+				AutoLoginPassword = AutoLoginPasswordBox.Password;
+		}
     
         public void ApplySecuritySettings()
         {
