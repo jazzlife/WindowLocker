@@ -1,0 +1,59 @@
+name: WindowLocker 테스트
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    
+    steps:
+    - name: 코드 체크아웃
+      uses: actions/checkout@v3
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+
+    - name: NuGet 패키지 복원
+      run: nuget restore WindowLocker.sln
+      
+    - name: Debug 빌드
+      run: msbuild WindowLocker.sln /p:Configuration=Debug /p:Platform="Any CPU"
+      
+    - name: VSTest 설치
+      uses: darenm/Setup-VSTest@v1
+      
+    - name: 테스트 실행
+      id: run_tests
+      continue-on-error: true
+      run: |
+        $testAssemblies = Get-ChildItem -Path "bin\Debug" -Filter "*Tests.dll" -Recurse
+        if ($testAssemblies.Count -gt 0) {
+          $testAssemblyPaths = $testAssemblies.FullName -join ' '
+          vstest.console.exe $testAssemblyPaths /Logger:trx
+          echo "tests_found=true" >> $env:GITHUB_OUTPUT
+        } else {
+          echo "테스트 어셈블리를 찾을 수 없습니다."
+          echo "tests_found=false" >> $env:GITHUB_OUTPUT
+        }
+      shell: pwsh
+      
+    - name: 테스트 결과 업로드
+      if: steps.run_tests.outputs.tests_found == 'true'
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: TestResults/*.trx
+        
+    - name: 코드 분석
+      run: |
+        dotnet tool install -g dotnet-format
+        dotnet-format --verify-no-changes --verbosity diagnostic 
+      continue-on-error: true 

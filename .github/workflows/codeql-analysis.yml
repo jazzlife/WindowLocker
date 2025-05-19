@@ -1,0 +1,48 @@
+name: "CodeQL 분석"
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * 0'  # 매주 일요일 자정에 실행
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: 분석
+    runs-on: windows-latest
+    permissions:
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+
+    steps:
+    - name: 코드 체크아웃
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+
+    - name: NuGet 패키지 복원
+      run: nuget restore WindowLocker.sln
+
+    - name: CodeQL 초기화
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: 빌드
+      run: msbuild WindowLocker.sln /p:Configuration=Debug /p:Platform="Any CPU"
+
+    - name: CodeQL 분석 수행
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{ matrix.language }}" 
