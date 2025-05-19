@@ -15,6 +15,7 @@ jobs:
     outputs:
       version: ${{ steps.set_version.outputs.version }}
       is_release: ${{ steps.set_version.outputs.is_release }}
+      artifact_name: ${{ steps.set_artifact_name.outputs.artifact_name }}
     
     steps:
     - name: 코드 체크아웃
@@ -45,6 +46,16 @@ jobs:
         }
       shell: pwsh
       
+    - name: 아티팩트 이름 설정
+      id: set_artifact_name
+      run: |
+        if ("${{ steps.set_version.outputs.is_release }}" -eq "true") {
+          echo "artifact_name=WindowLocker-${{ steps.set_version.outputs.version }}-Release" >> $env:GITHUB_OUTPUT
+        } else {
+          echo "artifact_name=WindowLocker-Debug-${{ github.run_number }}" >> $env:GITHUB_OUTPUT
+        }
+      shell: pwsh
+      
     - name: Debug 빌드
       if: github.event_name == 'pull_request' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
       run: msbuild WindowLocker.sln /p:Configuration=Debug /p:Platform="Any CPU" /p:DebugSymbols=true /p:DebugType=full
@@ -53,23 +64,43 @@ jobs:
       if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
       run: msbuild WindowLocker.sln /p:Configuration=Release /p:Platform="Any CPU"
       
+    - name: 디버그 결과물 디렉터리 확인
+      if: github.event_name == 'pull_request' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+      run: |
+        echo "빌드 결과물 디렉터리 목록:"
+        Get-ChildItem -Path "bin" -Recurse | Select-Object FullName
+      shell: pwsh
+      
+    - name: 릴리즈 결과물 디렉터리 확인
+      if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+      run: |
+        echo "빌드 결과물 디렉터리 목록:"
+        Get-ChildItem -Path "bin" -Recurse | Select-Object FullName
+      shell: pwsh
+      
     - name: 빌드 결과물 업로드 - Debug
       if: github.event_name == 'pull_request' || github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
       uses: actions/upload-artifact@v3
       with:
-        name: WindowLocker-Debug-${{ github.run_number }}
-        path: bin/Debug/
+        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        path: |
+          bin/Debug/
+          !**/*.pdb
+          !**/*.tmp
         retention-days: 14
-        if-no-files-found: error
+        if-no-files-found: warn
         
     - name: 빌드 결과물 업로드 - Release
       if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-artifact@v3
       with:
-        name: WindowLocker-${{ steps.set_version.outputs.version }}
-        path: bin/Release/
+        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
+        path: |
+          bin/Release/
+          !**/*.pdb
+          !**/*.tmp
         retention-days: 30
-        if-no-files-found: error
+        if-no-files-found: warn
         
     - name: Release 생성
       if: steps.set_version.outputs.is_release == 'true'
@@ -84,20 +115,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  download-example:
+  download-artifacts:
     needs: build
     runs-on: windows-latest
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    if: always() && needs.build.result == 'success'
     
     steps:
     - name: 빌드 결과물 다운로드
       uses: actions/download-artifact@v3
       with:
-        name: WindowLocker-${{ needs.build.outputs.version }}
+        name: ${{ needs.build.outputs.artifact_name }}
         path: downloaded-artifact
         
     - name: 다운로드 확인
       run: |
+        echo "아티팩트 이름: ${{ needs.build.outputs.artifact_name }}"
+        echo "빌드 버전: ${{ needs.build.outputs.version }}"
+        echo "다운로드된 파일 목록:"
         Get-ChildItem -Path downloaded-artifact -Recurse
-        echo "다운로드된 아티팩트 버전: ${{ needs.build.outputs.version }}"
       shell: pwsh 

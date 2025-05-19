@@ -12,6 +12,7 @@ jobs:
     runs-on: windows-latest
     outputs:
       tests_found: ${{ steps.run_tests.outputs.tests_found }}
+      artifact_name: ${{ steps.set_artifact_name.outputs.artifact_name }}
     
     steps:
     - name: 코드 체크아웃
@@ -32,6 +33,12 @@ jobs:
     - name: VSTest 설치
       uses: darenm/Setup-VSTest@v1
       
+    - name: 아티팩트 이름 설정
+      id: set_artifact_name
+      run: |
+        echo "artifact_name=test-results-${{ github.run_number }}" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+      
     - name: 테스트 실행
       id: run_tests
       continue-on-error: true
@@ -47,11 +54,24 @@ jobs:
         }
       shell: pwsh
       
+    - name: 테스트 결과 디렉토리 확인
+      run: |
+        if (Test-Path -Path "TestResults") {
+          echo "테스트 결과 디렉토리 존재"
+          Get-ChildItem -Path "TestResults" -Recurse | Select-Object FullName
+        } else {
+          echo "테스트 결과 디렉토리가 없습니다."
+          echo "현재 디렉토리 구조:"
+          Get-ChildItem -Recurse | Select-Object FullName
+        }
+      shell: pwsh
+      
     - name: 테스트 결과 업로드
+      id: upload_test_results
       if: steps.run_tests.outputs.tests_found == 'true'
       uses: actions/upload-artifact@v3
       with:
-        name: test-results-${{ github.run_number }}
+        name: ${{ steps.set_artifact_name.outputs.artifact_name }}
         path: TestResults/*.trx
         retention-days: 7
         if-no-files-found: warn
@@ -64,18 +84,19 @@ jobs:
 
   download-test-results:
     needs: test
-    if: needs.test.outputs.tests_found == 'true' && (github.event_name == 'workflow_dispatch' || contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/heads/master'))
+    if: always() && needs.test.outputs.tests_found == 'true' && needs.test.result == 'success'
     runs-on: windows-latest
     
     steps:
     - name: 테스트 결과 다운로드
       uses: actions/download-artifact@v3
       with:
-        name: test-results-${{ github.run_number }}
+        name: ${{ needs.test.outputs.artifact_name }}
         path: downloaded-test-results
         
     - name: 테스트 결과 확인
       run: |
+        echo "아티팩트 이름: ${{ needs.test.outputs.artifact_name }}"
+        echo "다운로드된 파일 목록:"
         Get-ChildItem -Path downloaded-test-results -Recurse
-        echo "다운로드된 테스트 결과 확인 완료"
       shell: pwsh 
