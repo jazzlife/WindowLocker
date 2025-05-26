@@ -81,6 +81,142 @@ namespace WindowLocker.Views
                         
                         if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
                             isAnySettingNotApplied = true;
+
+                        if (key.GetValue("ThreeFingerSlideEnabled") != null && (int)key.GetValue("ThreeFingerSlideEnabled") != 0)
+                            isAnySettingNotApplied = true;
+
+                        if (key.GetValue("FourFingerSlideEnabled") != null && (int)key.GetValue("FourFingerSlideEnabled") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-1. Synaptics 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Synaptics\SynTP\TouchPadPS2"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("3FingerGestures") != null && (int)key.GetValue("3FingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("4FingerGestures") != null && (int)key.GetValue("4FingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-2. ELAN 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Elantech\SmartPad"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("Gesture_3F_Enable") != null && (int)key.GetValue("Gesture_3F_Enable") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("Gesture_4F_Enable") != null && (int)key.GetValue("Gesture_4F_Enable") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-3. ALPS 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Alps\Apoint"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-4. Cirque 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Cirque\GlidePoint"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("AdvancedGestures") != null && (int)key.GetValue("AdvancedGestures") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-5. FocalTech 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\FocalTech\TouchPad"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("GestureEnable") != null && (int)key.GetValue("GestureEnable") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-6. Goodix 터치패드 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Goodix\TouchPad"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                        if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                            isAnySettingNotApplied = true;
+                    }
+                }
+
+                // 5-7. 기타 주요 터치패드 제조사들 설정 확인 (간소화된 체크)
+                string[] touchpadManufacturers = new[] {
+                    @"Software\Weida\TouchPad",
+                    @"Software\Sentelic\TouchPad", 
+                    @"Software\Atmel\TouchPad",
+                    @"Software\Validity\TouchPad",
+                    @"Software\Wacom\TouchPad",
+                    @"Software\Realtek\TouchPad",
+                    @"Software\Broadcom\TouchPad",
+                    @"Software\Cypress\TouchPad",
+                    @"Software\Ilitek\TouchPad",
+                    @"Software\Pixart\TouchPad",
+                    @"Software\Novatek\TouchPad",
+                    @"Software\Himax\TouchPad",
+                    @"Software\Raydium\TouchPad",
+                    @"Software\Melfas\TouchPad",
+                    @"Software\Silead\TouchPad",
+                    @"Software\Chipone\TouchPad"
+                };
+
+                foreach (string manufacturer in touchpadManufacturers)
+                {
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(manufacturer))
+                    {
+                        if (key != null)
+                        {
+                            if (key.GetValue("ThreeFingerGestures") != null && (int)key.GetValue("ThreeFingerGestures") != 0)
+                                isAnySettingNotApplied = true;
+                            if (key.GetValue("FourFingerGestures") != null && (int)key.GetValue("FourFingerGestures") != 0)
+                                isAnySettingNotApplied = true;
+                            if (key.GetValue("GestureEnable") != null && (int)key.GetValue("GestureEnable") != 0)
+                                isAnySettingNotApplied = true;
+                        }
+                    }
+                }
+
+                // 5-8. 추가 터치 제스처 설정 확인
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop"))
+                {
+                    if (key != null)
+                    {
+                        if (key.GetValue("TouchGestureSetting") != null && (int)key.GetValue("TouchGestureSetting") != 0)
+                            isAnySettingNotApplied = true;
                     }
                 }
 

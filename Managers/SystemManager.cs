@@ -462,18 +462,23 @@ namespace WindowLocker.Managers
                 }
 
                 // 세 손가락, 네 손가락 제스처 비활성화 설정
-                // 1. 터치패드 제스처 비활성화
+                // 1. Microsoft Precision TouchPad 제스처 비활성화
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", true))
                 {
                     // 세 손가락 제스처 비활성화
                     key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("ThreeFingerSlideEnabled", 0, RegistryValueKind.DWord);
+                    key.SetValue("ThreeFingerTapEnabled", 0, RegistryValueKind.DWord);
                     
                     // 네 손가락 제스처 비활성화
                     key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerSlideEnabled", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerTapEnabled", 0, RegistryValueKind.DWord);
                     
-                    // 제스처 기능 끄기, 멀티탭은 켜기
+                    // 추가 제스처 설정
                     key.SetValue("EnableMultiTap", 1, RegistryValueKind.DWord);
                     key.SetValue("EnableSwipeGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("AAPolicy", 0, RegistryValueKind.DWord);
                 }
 
                 // 2. 터치 활성화
@@ -498,6 +503,7 @@ namespace WindowLocker.Managers
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Control Panel\Desktop", true))
                 {
                     key.SetValue("TouchGesture", 0, RegistryValueKind.DWord);
+                    key.SetValue("TouchGestureSetting", 0, RegistryValueKind.DWord);
                 }
 
                 // 6. Synaptics 터치패드 설정 비활성화 (널리 사용되는 터치패드)
@@ -505,13 +511,341 @@ namespace WindowLocker.Managers
                 {
                     key.SetValue("3FingerGestures", 0, RegistryValueKind.DWord);
                     key.SetValue("4FingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
                 }
 
-                // 7. ELAN 터치패드 설정 비활성화 (널리 사용되는 다른 터치패드)
+                // 7. Synaptics 추가 설정
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Synaptics\SynTPEnh", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 8. ELAN 터치패드 설정 비활성화 (널리 사용되는 다른 터치패드)
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Elantech\SmartPad", true))
                 {
                     key.SetValue("Gesture_3F_Enable", 0, RegistryValueKind.DWord);
                     key.SetValue("Gesture_4F_Enable", 0, RegistryValueKind.DWord);
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 9. ALPS 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Alps\Apoint", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 10. Cirque 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Cirque\GlidePoint", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("AdvancedGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 11. FocalTech 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\FocalTech\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 12. Goodix 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Goodix\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 13. Weida 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Weida\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 14. Sentelic 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Sentelic\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 15. Atmel 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Atmel\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 16. Validity 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Validity\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 17. Wacom 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Wacom\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 18. Realtek 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Realtek\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 19. Broadcom 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Broadcom\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 20. Cypress 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Cypress\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 21. Ilitek 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Ilitek\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 22. Pixart 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Pixart\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 23. Novatek 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Novatek\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 24. Himax 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Himax\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 25. Raydium 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Raydium\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 26. Melfas 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Melfas\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 27. Silead 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Silead\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 28. Chipone 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Chipone\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 29. 일반적인 HID 터치패드 설정 활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Input\TIPC", true))
+                {
+                    key.SetValue("Enabled", 1, RegistryValueKind.DWord);
+                }
+
+                // 30. Windows 10/11 터치 키보드 및 필기판 서비스 비활성화
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\TabletTip\1.7", true))
+                {
+                    key.SetValue("EnableAutocorrection", 0, RegistryValueKind.DWord);
+                    key.SetValue("EnableSpellchecking", 0, RegistryValueKind.DWord);
+                    key.SetValue("EnableTextPrediction", 0, RegistryValueKind.DWord);
+                    key.SetValue("EnableDoubleTapSpace", 0, RegistryValueKind.DWord);
+                }
+
+                // 31. 추가 Windows 제스처 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true))
+                {
+                    key.SetValue("EnableBalloonTips", 0, RegistryValueKind.DWord);
+                    key.SetValue("DisablePreviewDesktop", 1, RegistryValueKind.DWord);
+                }
+
+                // 32. Windows Ink 워크스페이스 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\PenWorkspace", true))
+                {
+                    key.SetValue("PenWorkspaceAppSuggestionsEnabled", 0, RegistryValueKind.DWord);
+                }
+
+                // 33. 터치 키보드 자동 호출 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\TabletTip\1.7", true))
+                {
+                    key.SetValue("TipbandDesiredVisibility", 0, RegistryValueKind.DWord);
+                }
+
+                // 34. Intel 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Intel\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 35. AMD 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\AMD\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 36. Qualcomm 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Qualcomm\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 37. Mediatek 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Mediatek\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 38. Samsung 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Samsung\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 39. LG 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\LG\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 40. Dell 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Dell\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 41. HP 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HP\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 42. Lenovo 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Lenovo\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 43. ASUS 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\ASUS\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureMode", 0, RegistryValueKind.DWord);
+                }
+
+                // 44. Acer 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Acer\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 45. MSI 터치패드 설정 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\MSI\TouchPad", true))
+                {
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("GestureEnable", 0, RegistryValueKind.DWord);
+                }
+
+                // 46. 추가 Windows 제스처 정책 설정
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\TouchInput", true))
+                {
+                    key.SetValue("DisableTouchInput", 0, RegistryValueKind.DWord); // 터치 입력은 유지하되 제스처만 비활성화
+                    key.SetValue("DisableGestures", 1, RegistryValueKind.DWord);
+                }
+
+                // 47. Windows 멀티터치 제스처 전역 비활성화
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Gestures", true))
+                {
+                    key.SetValue("Enabled", 0, RegistryValueKind.DWord);
+                    key.SetValue("ThreeFingerGestures", 0, RegistryValueKind.DWord);
+                    key.SetValue("FourFingerGestures", 0, RegistryValueKind.DWord);
+                }
+
+                // 48. Windows 터치 제스처 인식 서비스 비활성화
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Services\TouchHID", true))
+                {
+                    key.SetValue("Start", 4, RegistryValueKind.DWord); // 4 = 비활성화
+                }
+
+                // 49. HID 터치 디바이스 제스처 비활성화
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SYSTEM\CurrentControlSet\Enum\HID", true))
+                {
+                    // HID 디바이스의 제스처 기능 비활성화를 위한 전역 설정
+                    key.SetValue("DisableGestures", 1, RegistryValueKind.DWord);
+                }
+
+                // 50. 터치 및 펜 서비스 제스처 비활성화
+                using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\PolicyManager\current\device\Touch", true))
+                {
+                    key.SetValue("DisableGestures", 1, RegistryValueKind.DWord);
                 }
 
                 // ------ 기존 알림 비활성화 설정 ------

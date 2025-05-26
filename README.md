@@ -39,12 +39,25 @@ WindowLocker는 Windows 시스템을 키오스크나 전시용 디스플레이�
   - 잠금 화면 및 스크린세이버 비활성화
   - 전원 설정 최적화 (절전 모드, 하이버네이션 비활성화)
   - 데스크톱 설정 최적화 (DPI 설정, 지연 잠금)
-  - 멀티 터치 제스처 비활성화
+  - **포괄적인 멀티 터치 제스처 비활성화**: 50개 이상의 터치패드/터치스크린 제조사 지원
+    - Microsoft Precision TouchPad (세손가락/네손가락 제스처, 슬라이드, 탭 등)
+    - Synaptics (SynTP, SynTPEnh)
+    - ELAN (SmartPad)
+    - ALPS (Apoint)
+    - Cirque (GlidePoint, Advanced Gestures)
+    - FocalTech, Goodix, Weida, Sentelic, Atmel, Validity
+    - Wacom, Realtek, Broadcom, Cypress, Ilitek, Pixart
+    - Novatek, Himax, Raydium, Melfas, Silead, Chipone
+    - Intel, AMD, Qualcomm, Mediatek
+    - 주요 OEM 제조사: Samsung, LG, Dell, HP, Lenovo, ASUS, Acer, MSI
+    - Windows 시스템 레벨 제스처 및 HID 디바이스 제스처 전역 비활성화
   - 알림 센터 및 토스트 알림 비활성화
   - 태블릿 모드 비활성화
   - Edge UI 스와이프 비활성화
   - 코타나 비활성화
   - 포커스 어시스트 설정 최적화
+  - Windows Ink 워크스페이스 비활성화
+  - 터치 키보드 자동 호출 비활성화
 
 ### 5. 자동 로그인 설정
 
